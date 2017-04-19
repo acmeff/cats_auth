@@ -1,4 +1,7 @@
 NinetyNineCatsDay1::Application.routes.draw do
+
+  resources :users, only: [:new, :create, :index, :show]
+
   resources :cats, except: :destroy
   resources :cat_rental_requests, only: [:create, :new] do
     post "approve", on: :member
