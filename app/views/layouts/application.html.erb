@@ -8,6 +8,26 @@
 </head>
 <body>
 
+      <% if current_user %>
+        <h1> <%= current_user.username %> currently logged in </h1>
+          <form action=" <%=sessions_url%>" method="post">
+            <input type="hidden" name="authenticity_token" value=" <%=form_authenticity_token%>">
+            <input type="hidden" name="_method" value="DELETE">
+            <input type="submit" value="logout">
+          </form>
+      <% else %>
+        <form action="<%=new_sessions_url%>" method="get">
+          <input type='submit' value="login">
+        </form>
+      <% end %>
+
+  <% if flash[:errors] %>
+    <% flash[:errors].each do |error| %>
+     <%= error %><br />
+    <% end %>
+  <% end %>
+
+
 <%= yield %>
 
 </body>

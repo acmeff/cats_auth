@@ -2,7 +2,12 @@ class User < ActiveRecord::Base
   validates :username, :session_token, presence: true, uniqueness: true
   validates :password_digest, presence: true
   validates :password, length: {minimum: 6, allow_nil: true }
+  after_initialize :ensure_session_token
 
+  attr_reader :password
+
+  has_many :cats
+  has_many :cat_rental_requests
 
   def self.find_by_credentials(user_name, password)
     user = User.find_by(username: user_name)
@@ -11,6 +16,14 @@ class User < ActiveRecord::Base
     else
       nil
     end
+  end
+
+  def self.generate_session_token
+    SecureRandom::urlsafe_base64
+  end
+
+  def ensure_session_token
+    self.session_token ||= User.generate_session_token
   end
 
   def reset_session_token!
