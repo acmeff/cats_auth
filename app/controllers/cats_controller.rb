@@ -1,13 +1,13 @@
 class CatsController < ApplicationController
-  before_action :right_owner, only: [:edit,:update]
-  helper_method :not_right_owner?
+  before_action :not_right_owner, only: [:edit,:update]
+  helper_method :right_owner?
 
-  def not_right_owner?
+  def right_owner?
     current_user.cats.where(id: params[:id]).exists?
   end
 
-  def right_owner
-    if right_owner
+  def not_right_owner
+    unless right_owner?
       redirect_to cats_url
     end
   end
